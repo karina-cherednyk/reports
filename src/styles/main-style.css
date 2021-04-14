@@ -1,0 +1,127 @@
+:root {
+    --primary: #3f51b5;
+    --secondary: #c51162;
+}
+
+body {
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+button:hover, a:hover, .btn:hover {
+    filter: brightness(0.7);
+}
+a.navbar-brand {
+    transform: none;
+}
+.nav-link {
+    margin-left: 8px;
+    padding: 12px!important;
+}
+
+.left-nav .nav-link {
+    color: var(--secondary)!important;
+    letter-spacing: 0.02857em;
+    text-transform: uppercase;
+}
+
+.navbar-toggler {
+    border-color: rgb(173, 173, 173);
+}
+.navbar-brand {
+    font-size: 1.5rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1.334;
+    letter-spacing: 0em;
+}
+
+.btn-nav {
+    display: inline-block;
+    width: fit-content;
+    border-color:  rgb(173, 173, 173)!important;
+    margin-top: 4px;
+}
+
+.bg-primary {
+    background-color: var(--primary)!important;
+}
+.btn {
+    font-size: 1rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 500;
+    line-height: 1.6;
+    margin-left: 8px;
+    margin-right: 8px;
+    letter-spacing: 0.0075em;
+}
+.btn-primary {
+    background-color: var(--primary)!important;
+    border-color: var(--primary);
+    
+}
+.btn:hover {
+    filter: brightness(0.7);
+}
+.changed-input, .changed-input:hover {
+    color: green;
+    border-color: green;
+}
+.dropdown {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.dropdown button {
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    background-color: transparent!important;
+    border-color:  #ced4da;
+    color: black;
+}
+.dropdown-toggle::after {
+    position: absolute;
+    right: 10px;
+    top: 15px;
+}
+.card {
+    min-height: 80vh;
+    max-width: 80vw;
+    width: fit-content;
+    padding:  20px; 
+    border: 5px solid #c51162!important;
+    box-shadow: 0px 3px 5px -1px rgb(0 0 0 / 20%), 0px 5px 8px 0px rgb(0 0 0 / 14%), 0px 1px 14px 0px rgb(0 0 0 / 12%);
+}
+.form-label {
+    color: rgba(0, 0, 0, 0.54);
+    padding: 0;
+    font-size: 1rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.00938em;
+}
+.form-label-h {
+    font-size: 1.5rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1.334;
+    letter-spacing: 0em;
+    color: black;
+    text-align: center;
+}
+td {
+    font-family:  'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-weight: normal;
+}
+tr:hover td {
+    background-color: rgba(170, 166, 231, 0.219)!important;
+    border-color: white;    
+}
+.form-control.is-invalid, .was-validated .form-control:invalid {
+    background-image: none;
+}
+.container {
+    padding-left: 15px;
+    margin: 0;
+}
