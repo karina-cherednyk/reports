@@ -1,5 +1,6 @@
 import { Form, Card, Container, Row, Col, FormControl } from 'react-bootstrap';
 import { Component } from 'react';
+import Table from './Table';
 
 function ComboBox({report, label, prop, options,  placeholder=label, handleChange}) {
     const val = report[prop];
@@ -62,32 +63,32 @@ class Report extends Component{
     }
 
     render() { 
-      return <>
-      <Card  border="secondary" >
-      <Container >
-          <Row><Col><Form.Label className="form-label-h" >НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ “КИЄВО-МОГИЛЯНСЬКА АКАДЕМІЯ”</Form.Label></Col></Row>
-          <Row><Col><Form.Label className="form-label-h">Заліково-екзаменаційна відомість {`${this.state.sheetType} № ${this.state.sheetCode}`} </Form.Label></Col></Row>
-          <Row><Col><ComboBox      report={this.state}        label="Освітній рівень" options={["Бакалавр","Магістр"]}  prop="okr"            handleChange={this.handleChange} /></Col></Row>
-          <Row><Col><ComboBox      report={this.state}        label="Факультет"       options={["ФІ", "FE"]}          prop="faculty"          handleChange={this.handleChange} /></Col>
-               <Col><ComboBox      report={this.state}        label="Рік навчання"    options={[1, 2, 3]}             prop="eduYear"          handleChange={this.handleChange} /></Col>
-               <Col><Input         report={this.state}        label="Група"           placeholder="Група"             prop="group"            handleChange={this.handleChange} /></Col></Row>
-          <Row><Col><Input         report={this.state}        label="Дисципліна"                                      prop="subject"          handleChange={this.handleChange} /></Col></Row>
-          <Row><Col><ComboBox      report={this.state}        label="Семестр"         options={["1", "2", "3", "4", "5", "6", "7", "8"]}      prop="term"             handleChange={this.handleChange} /></Col>
-               <Col><Input         report={this.state}        label="Залікові бали"   placeholder="залікові біли"     prop="creditPoints"     handleChange={this.handleChange} /></Col></Row>
-          <Row><Col><ComboBox      report={this.state}        label="Форма контролю"  options={["залік","іспит", "екзамен"]}     prop="controlForm"      handleChange={this.handleChange} /></Col>
-               <Col><Input         report={this.state}        label="День"            placeholder="День"              pre="date" prop="day"   handleChange={this.handleChange} /></Col>
-               <Col><Input         report={this.state}        label="Місяць"          placeholder="Місяць"            pre="date" prop="month" handleChange={this.handleChange} /></Col>
-               <Col><Input         report={this.state}        label="Рік"             placeholder="Рік"               pre="date" prop="year"  handleChange={this.handleChange} /></Col></Row>
-          <Row><Col><Input         report={this.state}        label="Прізвище"                                        prop="teacherSurname"   handleChange={this.handleChange} /></Col>
-               <Col><Input         report={this.state}        label="Ім'я"                                            prop="teacherFirstname" handleChange={this.handleChange} /></Col>
-               <Col xs={4}><Input  report={this.state}        label="По-батькові екзаменатора"                        prop="teacherLastname"  handleChange={this.handleChange} /></Col>
-               <Col xs={4}><Input  report={this.state}        label="Вчене звання"                                    prop="teacherRank"      handleChange={this.handleChange} /></Col></Row>
-          <Row>
-              {/* <Col><Table tableData={report.data} /></Col> */}
-          </Row>
-      </Container>         
-      </Card>
-      </>
+    return <>
+    <Card  border="secondary" >
+    <Container >
+        <Row><Col><Form.Label className="form-label-h" >НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ “КИЄВО-МОГИЛЯНСЬКА АКАДЕМІЯ”</Form.Label></Col></Row>
+        <Row><Col><Form.Label className="form-label-h">Заліково-екзаменаційна відомість {`${this.state.sheetType} № ${this.state.sheetCode}`} </Form.Label></Col></Row>
+        <Row><Col><ComboBox      report={this.state}        label="Освітній рівень" options={["Бакалавр","Магістр"]}  prop="okr"            handleChange={this.handleChange} /></Col></Row>
+        <Row><Col><ComboBox      report={this.state}        label="Факультет"       options={["ФІ", "FE"]}          prop="faculty"          handleChange={this.handleChange} /></Col>
+              <Col><ComboBox      report={this.state}        label="Рік навчання"    options={[1, 2, 3]}             prop="eduYear"          handleChange={this.handleChange} /></Col>
+              <Col><Input         report={this.state}        label="Група"           placeholder="Група"             prop="group"            handleChange={this.handleChange} /></Col></Row>
+        <Row><Col><Input         report={this.state}        label="Дисципліна"                                      prop="subject"          handleChange={this.handleChange} /></Col></Row>
+        <Row><Col><ComboBox      report={this.state}        label="Семестр"         options={["1", "2", "3", "4", "5", "6", "7", "8"]}      prop="term"             handleChange={this.handleChange} /></Col>
+              <Col><Input         report={this.state}        label="Залікові бали"   placeholder="залікові біли"     prop="creditPoints"     handleChange={this.handleChange} /></Col></Row>
+        <Row><Col><ComboBox      report={this.state}        label="Форма контролю"  options={["залік","іспит", "екзамен"]}     prop="controlForm"      handleChange={this.handleChange} /></Col>
+              <Col><Input         report={this.state}        label="День"            placeholder="День"              pre="date" prop="day"   handleChange={this.handleChange} /></Col>
+              <Col><Input         report={this.state}        label="Місяць"          placeholder="Місяць"            pre="date" prop="month" handleChange={this.handleChange} /></Col>
+              <Col><Input         report={this.state}        label="Рік"             placeholder="Рік"               pre="date" prop="year"  handleChange={this.handleChange} /></Col></Row>
+        <Row><Col><Input         report={this.state}        label="Прізвище"                                        prop="teacherSurname"   handleChange={this.handleChange} /></Col>
+              <Col><Input         report={this.state}        label="Ім'я"                                            prop="teacherFirstname" handleChange={this.handleChange} /></Col>
+              <Col xs={4}><Input  report={this.state}        label="По-батькові екзаменатора"                        prop="teacherLastname"  handleChange={this.handleChange} /></Col>
+              <Col xs={4}><Input  report={this.state}        label="Вчене звання"                                    prop="teacherRank"      handleChange={this.handleChange} /></Col></Row>
+        <Row>
+            <Col><Table tableData={this.state.data} /></Col>
+        </Row>
+    </Container>         
+    </Card>
+    </>
 
     }
 }
