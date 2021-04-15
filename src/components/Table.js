@@ -1,5 +1,6 @@
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
+import filterFactory, { numberFilter } from 'react-bootstrap-table2-filter';
 import {Component} from 'react';
 
 function mapColumnName(name) {
@@ -41,8 +42,12 @@ class Table extends Component{
             this.dataColumns = columns.map(c => c[0]);
             this.tableColumns = columns.map(c => ({dataField: c[0], text: c[1], style: this.mapStyle }) );
         }
-        this.tableColumns.find( x => x.dataField == "ectsGrade").editor = ectsEditor;
-        this.tableColumns.find( x => x.dataField == "nationalGrade").editor = nationalEditor;
+        this.tableColumns.find( x => x.dataField === "ectsGrade").editor = ectsEditor;
+        this.tableColumns.find( x => x.dataField === "nationalGrade").editor = nationalEditor;
+        // this.tableColumns.find( x => x.dataField === "sum").filter = numberFilter();
+        // this.tableColumns.find( x => x.dataField === "termGrade").filter = numberFilter();
+        // this.tableColumns.find( x => x.dataField === "examGrade").filter = numberFilter();
+        
     }
 
 
@@ -54,14 +59,11 @@ class Table extends Component{
         else            return {color: "black"}
     }
 
-    handleTableChange = (type, { data, cellEdit: { rowId, dataField, newValue } }) => {
-        setTimeout( () => {
-          const result = data.map((row) => 
-              row.ordinal === rowId ? {...row, [dataField]: newValue} : row
-          )
-          this.setState(() => ({data: result}));
-        }, 2000 );
-        
+    handleTableChange = (_, { data, cellEdit: { rowId, dataField, newValue } }) => {
+        const result = data.map((row) => 
+            row.ordinal === rowId ? {...row, [dataField]: newValue, [dataField+"Changed"]: true} : row
+        )
+        this.setState(() => ({data: result}));  
     }
 
     render() {
@@ -72,9 +74,8 @@ class Table extends Component{
             columns={ this.tableColumns } 
             cellEdit={ cellEditFactory({mode: "click"}) }
             onTableChange={this.handleTableChange}
-            
-            style={{ maxWidth: "40vw" }}
             condensed={true}
+            filter={ filterFactory()}
             />
     }
 }
