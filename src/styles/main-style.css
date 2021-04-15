@@ -17,6 +17,9 @@ a.navbar-brand {
     margin-left: 8px;
     padding: 12px!important;
 }
+.nav-link.active {
+    background-color: var(--primary)!important;
+}
 
 .left-nav .nav-link {
     color: var(--secondary)!important;
@@ -89,7 +92,8 @@ a.navbar-brand {
     max-width: 80vw;
     width: fit-content;
     padding:  20px; 
-    border: 5px solid #c51162!important;
+    /* border: 5px solid #c51162!important; */
+    border: 5px solid transparent!important;
     box-shadow: 0px 3px 5px -1px rgb(0 0 0 / 20%), 0px 5px 8px 0px rgb(0 0 0 / 14%), 0px 1px 14px 0px rgb(0 0 0 / 12%);
 }
 .form-label {
@@ -120,6 +124,7 @@ tr:hover td {
 }
 .form-control.is-invalid, .was-validated .form-control:invalid {
     background-image: none;
+    color: #dc3545;
 }
 .container {
     padding-left: 15px;

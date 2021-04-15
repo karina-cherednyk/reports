@@ -44,9 +44,9 @@ class EditableReportPage extends Component {
       return (
         <>
         <NavMenu  loadReports={this.loadReports}  />
-        <Tab.Container  defaultActiveKey={-1} >
-          <Row>
-            <Col sm={1}>
+        <Tab.Container  defaultActiveKey={-1}  >
+          <Row style={{padding: "20px"}}>
+            <Col sm={3}>
               < Nav variant="pills" className="flex-column">
                 {this.state.reports.map( (r,idx) => (
                   <Nav.Item key={"nav-"+idx} ><Nav.Link eventKey={idx}> {r.fileName}</Nav.Link></Nav.Item>
