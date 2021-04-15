@@ -1,6 +1,7 @@
 import { Form, Card, Container, Row, Col, FormControl } from 'react-bootstrap';
 import { Component } from 'react';
 import Table from './Table';
+import React from 'react';
 
 function ComboBox({report, label, prop, options,  placeholder=label, handleChange}) {
     const val = report[prop];
@@ -51,6 +52,16 @@ class Report extends Component{
     constructor(props){
         super(props);
         this.state = {...props.report};
+        this.tableDataRef = React.createRef();
+        
+    }
+    tableData = () => this.tableDataRef ? 
+              this.tableDataRef.current.state.data : null;
+
+    getUpdatedReport = () => {
+      const report = this.state;
+      report.data = this.tableData();
+      return report;
     }
 
     handleChange = (event) => {
@@ -84,7 +95,7 @@ class Report extends Component{
               <Col xs={4}><Input  report={this.state}        label="По-батькові екзаменатора"                        prop="teacherLastname"  handleChange={this.handleChange} /></Col>
               <Col xs={4}><Input  report={this.state}        label="Вчене звання"                                    prop="teacherRank"      handleChange={this.handleChange} /></Col></Row>
         <Row>
-            <Col><Table tableData={this.state.data} /></Col>
+            <Col><Table ref={this.tableDataRef} tableData={this.state.data} /></Col>
         </Row>
     </Container>         
     </Card>

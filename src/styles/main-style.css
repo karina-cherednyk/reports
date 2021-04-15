@@ -38,11 +38,14 @@ a.navbar-brand {
     letter-spacing: 0em;
 }
 
+label.btn-nav {
+    margin-top: 5px;
+}
+
 .btn-nav {
     display: inline-block;
     width: fit-content;
     border-color:  rgb(173, 173, 173)!important;
-    margin-top: 4px;
 }
 
 .bg-primary {

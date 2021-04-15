@@ -1,6 +1,6 @@
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
-import filterFactory, { numberFilter } from 'react-bootstrap-table2-filter';
+// import filterFactory, { numberFilter } from 'react-bootstrap-table2-filter';
 import {Component} from 'react';
 
 function mapColumnName(name) {
@@ -23,6 +23,11 @@ const nationalEditor = {
     options: ["Відмінно", "Добре", "Задовільно", "Незадовільно"].map( c => ({label: c, value: c}))
 }
 
+const numberValidator = (newValue, x, y) => {
+    if(isNaN(newValue)) return {valid: false}
+    if(newValue < 0 || newValue > 100) return {valid: false}
+    return true;
+}
 
 class Table extends Component{
 
@@ -44,9 +49,9 @@ class Table extends Component{
         }
         this.tableColumns.find( x => x.dataField === "ectsGrade").editor = ectsEditor;
         this.tableColumns.find( x => x.dataField === "nationalGrade").editor = nationalEditor;
-        // this.tableColumns.find( x => x.dataField === "sum").filter = numberFilter();
-        // this.tableColumns.find( x => x.dataField === "termGrade").filter = numberFilter();
-        // this.tableColumns.find( x => x.dataField === "examGrade").filter = numberFilter();
+        this.tableColumns.find( x => x.dataField === "sum").validator = numberValidator;
+        this.tableColumns.find( x => x.dataField === "termGrade").validator = numberValidator;
+        this.tableColumns.find( x => x.dataField === "examGrade").validator = numberValidator;
         
     }
 
@@ -72,10 +77,9 @@ class Table extends Component{
             keyField='ordinal' 
             data={ this.state.data } 
             columns={ this.tableColumns } 
-            cellEdit={ cellEditFactory({mode: "click"}) }
+            cellEdit={ cellEditFactory({mode: "click", blurToSave: true}) }
             onTableChange={this.handleTableChange}
             condensed={true}
-            filter={ filterFactory()}
             />
     }
 }

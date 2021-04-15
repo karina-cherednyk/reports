@@ -1,7 +1,9 @@
 import {  Nav, Row, Col,  Tab } from 'react-bootstrap';
 import Report from './Report';
 import NavMenu from './NavMenu';
+import ConfirmDialog from './ConfirmDialog';
 import { Component } from 'react';
+import  React  from 'react';
 
 const backendServer = "http://138.68.95.218:40410";
 
@@ -11,11 +13,23 @@ class EditableReportPage extends Component {
         super()
         this.state = {
             reports: [],
-            curIdx: -1
+            curIdx: -1,
         };
+        this.reportInstances  = [];
+        this.confirmDialogRef = React.createRef();
     }
 
-    checkForErrors(){}
+    checkReport = () => {
+      if(this.state.curIdx < 0) return;
+      const report = this.reportInstances[this.state.curIdx].getUpdatedReport();
+      // this.confirmDialogRef.current.showLoadDialog(report);
+    }
+
+    saveReport = () => {
+      if(this.state.curIdx < 0) return;
+      const report = this.reportInstances[this.state.curIdx].getUpdatedReport();
+      this.confirmDialogRef.current.showLoadDialog(report);
+    }
 
 
     loadReports = (files) => {
@@ -30,7 +44,6 @@ class EditableReportPage extends Component {
             
             fetched_reports.push(report);
             if(fetched_reports.length === files.length){
-                console.log(fetched_reports);
                 const new_reports = [...this.state.reports, ...fetched_reports];
                 new_reports.forEach((r, idx) => r.index = idx);
                 console.log(new_reports)
@@ -43,8 +56,16 @@ class EditableReportPage extends Component {
     render (){
       return (
         <>
-        <NavMenu  loadReports={this.loadReports}  />
-        <Tab.Container  defaultActiveKey={-1}  >
+        <ConfirmDialog ref={this.confirmDialogRef} 
+                      title={"Підтвердити збереження"}
+                      prompt={"Оригінал не відповідає відомості, що буде збережена в базі даних, Зберегти виправлену відомість?"}
+                      />
+        <NavMenu  loadReports={this.loadReports}  
+                  checkReport={this.checkReport}
+                  saveReport={this.saveReport}
+                  />
+
+        <Tab.Container  defaultActiveKey={-1} onSelect={(idx) => this.setState({curIdx: idx}) } >
           <Row style={{padding: "20px"}}>
             <Col sm={3}>
               < Nav variant="pills" className="flex-column">
@@ -56,7 +77,7 @@ class EditableReportPage extends Component {
             <Col sm={9}>
               <Tab.Content>
                 {this.state.reports.map( (r,idx) => (
-                    <Tab.Pane key={"ntab-"+r.index} eventKey={idx} ><Report report={r} /></Tab.Pane>
+                    <Tab.Pane key={"ntab-"+r.index} eventKey={idx} ><Report ref={ref => { this.reportInstances[idx] = ref; } } report={r} /></Tab.Pane>
                 ))}
               </Tab.Content>
             </Col>
