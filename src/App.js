@@ -1,10 +1,10 @@
-import EditableReport from "./components/EditableReport";
+import EditableReportPage from "./components/EditableReportPage";
 
 
 function App() {
   return (
     <div className="App">
-      <EditableReport />
+      <EditableReportPage />
     </div>
   );
 }
