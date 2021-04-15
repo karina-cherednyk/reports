@@ -1,6 +1,6 @@
 import { Navbar, Button, Nav } from 'react-bootstrap';
 
-function NavMenu ({loadReports, checkReport, saveReport}) {
+function NavMenu ({loadReports, checkReport, saveReport, isCheckEnabled, isSaveEnabled}) {
 
     return (
         <Navbar bg="primary navbar-dark" expand="lg">
@@ -16,8 +16,8 @@ function NavMenu ({loadReports, checkReport, saveReport}) {
                     onChange={(e) => loadReports(e.target.files)}/>
             </label>
             </Nav>
-            <Button className="btn-nav" onClick={checkReport}>Перевірити відомості</Button>
-            <Button onClick={saveReport}>Завантажити відомість в базу</Button>
+            <Button className="btn-nav" onClick={checkReport} disabled={!isCheckEnabled} >Перевірити відомості</Button>
+            <Button onClick={saveReport} disabled={!isSaveEnabled} >Завантажити відомість в базу</Button>
         </Navbar.Collapse>
         </Navbar>
         )

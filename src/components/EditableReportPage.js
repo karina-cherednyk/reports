@@ -14,23 +14,35 @@ class EditableReportPage extends Component {
         this.state = {
             reports: [],
             curIdx: -1,
+            checkEnabled: false,
+            saveEnabled: false,
         };
         this.reportInstances  = [];
         this.confirmDialogRef = React.createRef();
     }
+    getCurrentReport = () => {
+      if(this.state.curIdx < 0) return null;
+      return this.reportInstances[this.state.curIdx].getUpdatedReport();
+    }
+    getCurrentReportRef = () => {
+      if(this.state.curIdx < 0) return null;
+      return this.reportInstances[this.state.curIdx];
+    }
 
     checkReport = () => {
-      if(this.state.curIdx < 0) return;
-      const report = this.reportInstances[this.state.curIdx].getUpdatedReport();
-      // this.confirmDialogRef.current.showLoadDialog(report);
+      const report = this.getCurrentReport();
+      if(report)
+        console.log("CHECK report");
     }
 
     saveReport = () => {
-      if(this.state.curIdx < 0) return;
-      const report = this.reportInstances[this.state.curIdx].getUpdatedReport();
-      this.confirmDialogRef.current.showLoadDialog(report);
+      const report = this.getCurrentReport();
+      if(report)
+        this.confirmDialogRef.current.showLoadDialog(report);
     }
 
+    setCheckEnabled = (val) => this.setState({checkEnabled: val});
+    setSaveEnabled = (val) =>  this.setState({saveEnabled: val});
 
     loadReports = (files) => {
         let fetched_reports = [];
@@ -53,6 +65,13 @@ class EditableReportPage extends Component {
         } )
     }
 
+    handleReportSelect = (idx) => {
+      this.setState({curIdx: idx}, () => {
+        const reportRef = this.getCurrentReportRef();
+        this.setState({checkEnabled: reportRef.checkEnabled, saveEnabled: reportRef.saveEnabled}) 
+      } )
+    }
+
     render (){
       return (
         <>
@@ -60,12 +79,12 @@ class EditableReportPage extends Component {
                       title={"Підтвердити збереження"}
                       prompt={"Оригінал не відповідає відомості, що буде збережена в базі даних, Зберегти виправлену відомість?"}
                       />
-        <NavMenu  loadReports={this.loadReports}  
-                  checkReport={this.checkReport}
-                  saveReport={this.saveReport}
+        <NavMenu  loadReports={this.loadReports}  curIdx={this.state.curIdx}
+                  checkReport={this.checkReport}  isCheckEnabled={this.state.checkEnabled}
+                  saveReport={this.saveReport}    isSaveEnabled={this.state.saveEnabled}
                   />
 
-        <Tab.Container  defaultActiveKey={-1} onSelect={(idx) => this.setState({curIdx: idx}) } >
+        <Tab.Container  defaultActiveKey={-1} onSelect={this.handleReportSelect} >
           <Row style={{padding: "20px"}}>
             <Col sm={3}>
               < Nav variant="pills" className="flex-column">
@@ -77,7 +96,10 @@ class EditableReportPage extends Component {
             <Col sm={9}>
               <Tab.Content>
                 {this.state.reports.map( (r,idx) => (
-                    <Tab.Pane key={"ntab-"+r.index} eventKey={idx} ><Report ref={ref => { this.reportInstances[idx] = ref; } } report={r} /></Tab.Pane>
+                    <Tab.Pane key={"ntab-"+r.index} eventKey={idx} >
+                      <Report ref={ref => { this.reportInstances[idx] = ref; } } report={r} 
+                              setCheckEnabled={this.setCheckEnabled} setSaveEnabled={this.setSaveEnabled} />
+                      </Tab.Pane>
                 ))}
               </Tab.Content>
             </Col>

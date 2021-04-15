@@ -52,8 +52,13 @@ class Report extends Component{
     constructor(props){
         super(props);
         this.state = {...props.report};
+        this.checkEnabled = false;
+        this.saveEnabled = props.report.isValid;
+
         this.tableDataRef = React.createRef();
-        
+        this.setCheckEnabled = () => props.setCheckEnabled(this.checkEnabled);
+        this.setSaveEnabled = () => props.setSaveEnabled(this.saveEnabled);
+
     }
     tableData = () => this.tableDataRef ? 
               this.tableDataRef.current.state.data : null;
@@ -69,8 +74,11 @@ class Report extends Component{
         [event.target.name]: event.target.value,
         [event.target.name+"Changed"]: true,
       });
-      console.log(this.state)
-      
+      this.checkEnabled = true;
+      this.saveEnabled = false;
+
+      this.setCheckEnabled();
+      this.setSaveEnabled();
     }
 
     render() { 

@@ -7,9 +7,7 @@ body {
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     -webkit-font-smoothing: antialiased;
 }
-button:hover, a:hover, .btn:hover {
-    filter: brightness(0.7);
-}
+
 a.navbar-brand {
     transform: none;
 }
@@ -65,7 +63,8 @@ label.btn-nav {
     border-color: var(--primary);
     
 }
-.btn:hover {
+
+a:hover, .btn:hover:not(:disabled):not(.disabled) {
     filter: brightness(0.7);
 }
 .changed-input, .changed-input:hover {
