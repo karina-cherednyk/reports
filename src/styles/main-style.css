@@ -35,7 +35,23 @@ a.navbar-brand {
     line-height: 1.334;
     letter-spacing: 0em;
 }
-
+.form-control:disabled {
+    background-color: inherit
+}
+#pageDropDown {
+    color:black;
+    width: fit-content;
+    height: fit-content;
+}
+#pageDropDown:hover {
+    color: black;
+}
+#pageDropDown::after {
+    content:none;
+}
+.bg-primary .nav-link {
+    color: white;
+}
 label.btn-nav {
     margin-top: 5px;
 }
@@ -66,6 +82,9 @@ label.btn-nav {
 
 a:hover, .btn:hover:not(:disabled):not(.disabled) {
     filter: brightness(0.7);
+}
+.btn:disabled {
+    border: none;
 }
 .changed-input, .changed-input:hover {
     color: green;
