@@ -24,7 +24,9 @@ a.navbar-brand {
     letter-spacing: 0.02857em;
     text-transform: uppercase;
 }
-
+.nav-link {
+    margin-bottom: 10px;
+}
 .navbar-toggler {
     border-color: rgb(173, 173, 173);
 }

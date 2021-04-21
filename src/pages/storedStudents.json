@@ -1,0 +1,63 @@
+[
+  {
+    "ordinal": 1,
+    "bookNo": "І 002/10 мп",
+    "studentName": "Максим Анатолійович",
+    "grade": 88,
+    "subject": "Вибрані розділи математичного аналізу",
+    "teacherName": "Анатолій Вікторович Дмитрієв",
+    "date": { "day": 29, "month": "квітня", "year": 2012},
+    "isDebtor": false
+  },
+  {
+    "ordinal": 1,
+    "bookNo": "І 002/10 мп",
+    "studentName": "Максим Анатолійович",
+    "grade": 88,
+    "subject": "Математичне мислення",
+    "teacherName": "Андрій Олегович Ясенко",
+    "date": { "day": 29, "month": "квітня", "year": 2010},
+    "isDebtor": false
+  },
+  {
+    "ordinal": 1,
+    "bookNo": "І 002/10 мп",
+    "studentName": "Максим Анатолійович",
+    "grade": null,
+    "subject": "Фізичне виховання",
+    "teacherName": "Яків Степан Богданович",
+    "date": { "day": 29, "month": "квітня", "year": 2010},
+    "isDebtor": true
+  },
+  {
+    "ordinal": 1,
+    "bookNo": "І 002/10 мп",
+    "studentName": "Віталій Олексійович",
+    "grade": 78,
+    "subject": "Вибрані розділи математичного аналізу",
+    "teacherName": "Анатолій Вікторович Дмитрієв",
+    "date": { "day": 29, "month": "квітня", "year": 2012},
+    "isDebtor": false
+  },
+  {
+    "ordinal": 1,
+    "bookNo": "І 002/10 мп",
+    "studentName": "Віталій Олексійович",
+    "grade": 100,
+    "subject": "Математичне мислення",
+    "teacherName": "Андрій Олегович Ясенко",
+    "date": { "day": 29, "month": "квітня", "year": 2010},
+    "isDebtor": false
+  },
+  {
+    "ordinal": 1,
+    "bookNo": "І 002/10 мп",
+    "studentName": "Юрій Генадійович",
+    "grade": 96,
+    "subject": "Фізичне виховання",
+    "teacherName": "Яків Степан Богданович",
+    "date": { "day": 29, "month": "квітня", "year": 2010},
+    "isDebtor": false
+  }
+
+]

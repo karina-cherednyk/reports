@@ -3,11 +3,20 @@ import EditableReportPage   from "./pages/EditableReportPage";
 import StudentsDisplayPage  from "./pages/StudentsDisplayPage";
 import SubjectsDisplayPage  from "./pages/SubjectsDisplayPage";
 import ReportsDisplayPage   from "./pages/ReportsDisplayPage";
-import {Navbar, Nav} from 'react-bootstrap'
+import {Navbar, Nav, Button} from 'react-bootstrap'
 import {LinkContainer} from 'react-router-bootstrap'
 import { Component } from 'react';
+import { ArrowUp, ArrowDown } from "react-bootstrap-icons";
 
-function App() {
+class App extends Component {
+  constructor(){
+    super();
+    this.state = {
+      toolbarOpened: true
+    }
+  }
+
+  render(){
   return (
     <div className="App">
 
@@ -19,44 +28,35 @@ function App() {
             <LinkContainer to="/students">
               <Nav.Link>Відомості про студентів</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/subjects">
+            {/* <LinkContainer to="/subjects">
               <Nav.Link>Відомості про курси</Nav.Link>
-            </LinkContainer>
+            </LinkContainer> */}
             <LinkContainer to="/reports" >
               <Nav.Link>Переглянути збережені відомості</Nav.Link>
             </LinkContainer>
+            <Button className="ml-auto"
+              onClick={() => 
+                this.setState({toolbarOpened : !this.state.toolbarOpened})}
+                aria-expanded={this.state.opened} > 
+                {this.state.toolbarOpened ? <ArrowUp/> : <ArrowDown /> }
+              </Button>
         </Navbar>
         <Switch>
           <Route path="/editReports">
-            <EditableReportPage />
+            <EditableReportPage toolbarOpened={this.state.toolbarOpened} />
           </Route>
           <Route path="/students">
-            <Users />
-          </Route>
-          <Route path="/subjects">
-            <About />
+            <StudentsDisplayPage />
           </Route>
           <Route path="/reports">
-            <ReportsDisplayPage />
+            <ReportsDisplayPage toolbarOpened={this.state.toolbarOpened}  />
           </Route>
         </Switch> 
       </Router>
     </div>
   );
-}
-
-class Home extends Component {
-  render() {
-  return <h2>Home</h2>;
   }
 }
 
-function About() {
-  return <h2>About</h2>;
-}
-
-function Users() {
-  return <h2>Users</h2>;
-}
 
 export default App;
