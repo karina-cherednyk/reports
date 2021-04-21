@@ -3,7 +3,8 @@ import { Component} from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import { Card,  Container , Tab, Row, Col, Nav, Button } from 'react-bootstrap';
+import filterFactory, { textFilter, numberFilter, Comparator } from 'react-bootstrap-table2-filter';
+import { Card,  Container , Tab, Row, Col, Nav, Button, Form } from 'react-bootstrap';
 
 function mapColumnName(name) {
   const names = { ordinal: "№ відомості", studentName: "ПІБ студента", 
@@ -14,8 +15,11 @@ function mapColumnName(name) {
                   index: "№"
               }
   return names[name]
-
 }
+function invisibleColumn(name){
+  return name === "index" || name === "isDebtor";
+}
+
 const dateFormatter = (cell, _) => {
   return cell.day+" "+cell.month+" "+cell.year
 }
@@ -23,12 +27,37 @@ const paginationOptions = {
   sizePerPageList: ([5, 10, 15, 20, 30]).map(x => ({text: x+"", value: x}))
 };
 
+const custNumFilter = numberFilter({
+  // options: [2100, 2103, 2105],
+  placeholder: ' ',
+  withoutEmptyComparatorOption: true,
+  comparators: [Comparator.EQ, Comparator.GT, Comparator.LT],
+  style: { display: "flex", justifyContent: "space-between"},
+  numberStyle : {width: "80px"}
+});
+
+const studentContent= (row) => {
+  return  <Container className="dataFooter" >
+            <Row> <h2>{row.studentName}</h2></Row>
+            <Row><p>Середній бал за рік:</p> </Row>
+            <Row><p>Середній бал за семестр:</p></Row>
+          </Container>
+         
+}
+
+
 
 const CustomToggleList = ({columns, onColumnToggle, toggles}) => <>{
-  columns.map(col => ({...col, toggle: toggles.dataField}))
+  columns.filter(col => !invisibleColumn(col.dataField))
+  .map(col => ({...col, toggle: toggles.dataField}))
   .map( col => (
     <Nav.Item key={"nav-"+col.dataField} >
-      <Nav.Link
+      {col.dataField === "studentName" ? (
+        <Nav.Link className="active">
+          {col.text} 
+        </Nav.Link>
+      ) :
+      (<Nav.Link
         className="active"
         aria-pressed={columns.toggle} 
         onClick={(e) => { 
@@ -36,9 +65,11 @@ const CustomToggleList = ({columns, onColumnToggle, toggles}) => <>{
           e.target.classList.toggle('active'); 
         } }> 
         {col.text} 
-      </Nav.Link>
+      </Nav.Link>)
+      }
       </Nav.Item>
   ))
+
 }</>
 
 class StudentsDisplayPage extends Component {
@@ -52,39 +83,64 @@ class StudentsDisplayPage extends Component {
     columns.find( x => x.dataField === "date").formatter = dateFormatter;
     columns.find( x => x.dataField === "index").hidden = true;
     columns.find( x => x.dataField === "isDebtor").hidden = true;
+    columns.forEach( x => x.filter = textFilter({ placeholder: " "}));
+    columns.find( x => x.dataField === "grade").filter = custNumFilter;
 
     this.state = {
       dataColumns: dataColumns,
       columns: columns,
-      data: data
+      data: data,
+      footerContent: null,
+      onlyDebtors: false,
+      toggledColumns: new Set()
     }
-    console.log(this.state)
+
+    this.rowEvents = {
+      onClick: (e, row, rowIndex) => {
+        this.setState({footerContent: studentContent(row)});
+      }
+    }
   }
 
   render(){
     return (
       <ToolkitProvider
         keyField="index"
-        data={ this.state.data } 
+        data={ this.state.onlyDebtors ? this.state.data.filter(x => x.isDebtor) : this.state.data } 
         columns={ this.state.columns } 
         columnToggle
       >
       { props =>
         (<Tab.Container defaultActiveKey={-1}>
         <Row style={{padding: "20px"}}>
-          <Col sm={3}>
+          <Col sm={2}>
             <Nav variant="pills" className="flex-column">
-            <CustomToggleList { ...props.columnToggleProps } />
+            <Form.Check className="nav-link">
+              <Form.Check.Input onClick={e => this.setState({onlyDebtors: e.target.checked} )} />
+              <Form.Check.Label>Показувати лише боржників</Form.Check.Label>
+            </Form.Check>
+
+            <CustomToggleList { ...props.columnToggleProps }  />
             </Nav>
           </Col>
-          <Col sm={9}>
-          <Card className="m-auto" style={{top: "20px"}}>
-          <Container>
+          <Col sm={10}>
+          
+          <Card className="m-auto" style={{top: "20px", minWidth: "90%"}}>
+          <Container style={{ minWidth: "100%"}} >
+          <Row>
             <BootstrapTable
                 condensed={true}
                 bordered={ false }
                 { ...props.baseProps }
-                pagination={ paginationFactory(paginationOptions) } />
+                pagination={ paginationFactory(paginationOptions) } 
+                filter={ filterFactory() }
+                rowEvents={ this.rowEvents }
+                
+                />
+          </Row>
+          <Row >
+            {this.state.footerContent}
+          </Row>
           </Container>
         </Card>
           </Col>

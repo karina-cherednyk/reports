@@ -1,5 +1,7 @@
 :root {
     --primary: #3f51b5;
+    --primary-hover: #6eb7f728;
+    --primary-footer: #6eb7f7de;
     --secondary: #c51162;
 }
 
@@ -15,8 +17,24 @@ a.navbar-brand {
     margin-left: 8px;
     padding: 12px!important;
 }
-.nav-link.active {
-    background-color: var(--primary)!important;
+.nav-link {
+    margin-left: 8px;
+    padding: 12px!important;
+}
+.nav-link.form-check {
+    margin-left: 20px;
+    padding: 12px!important;
+    font-weight: 600;
+}
+.nav-link.form-check * {
+
+    color: var(--primary);
+}
+.nav-pills .nav-link.active, .page-item.active .page-link {
+    background-color: var(--primary);
+}
+a.page-link{
+    color:  var(--primary);
 }
 
 .left-nav .nav-link {
@@ -142,7 +160,7 @@ td {
     font-weight: normal;
 }
 tr:hover td {
-    background-color: rgba(170, 166, 231, 0.219)!important;
+    background-color: var(--primary-hover)!important;
     border-color: white;    
 }
 .form-control.is-invalid, .was-validated .form-control:invalid {
@@ -152,4 +170,8 @@ tr:hover td {
 .container {
     padding-left: 15px;
     margin: 0;
+}
+.dataFooter {
+    border: 1px dashed var(--primary-footer);
+    padding: 20px;
 }
