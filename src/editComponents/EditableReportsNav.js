@@ -12,7 +12,7 @@ function EditableReportsNav ({toolbarOpened, loadReports, checkReport, saveRepor
             <label className="btn btn-default btn-primary btn-nav">
                 Завантажити відомості
                 <input type="file" hidden multiple accept=".pdf" 
-                    onChange={(e) => loadReports(e.target.files)}/>
+                    onChange={(e) => { loadReports(e.target.files); e.target.value = ""; }}  />
             </label>
             </Nav>
             <Button className="btn-nav" onClick={checkReport} disabled={!isCheckEnabled} >Перевірити відомості</Button>

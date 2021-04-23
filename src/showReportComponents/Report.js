@@ -5,7 +5,7 @@ import React from 'react';
 
 
 function Text({report, label, prop, pre, placeholder=label, handleChange}) {
-    const val = pre ? report[pre][prop] : report[prop];
+    const val = pre ? report[pre][prop] : report[prop] || "";
 
     return (
         <Form.Group >

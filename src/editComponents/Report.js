@@ -13,7 +13,7 @@ function Input({report, label, prop, pre,  handleChange, options}) {
     const content = options ?  (
       ["", ...options].map((o, idx) => <option key={prop+"_"+idx} >{o}</option>)
     ): null;
-
+    //console.log(prop + ' ' + val + ' ' + changed);
     return (
         <Form.Group >
         <Form.Label>{label}</Form.Label>
@@ -31,21 +31,15 @@ function Input({report, label, prop, pre,  handleChange, options}) {
     )
 }
 
+const facultyOptions = ["інформатики", "правничих наук", "природничих наук", "гуманітарних наук", "економіки"];
+const termOptions = ["1", "2", "2д", "3", "4", "4д", "5", "6", "6д", "7", "8"];
+
 class Report extends Component{
 
     constructor(props){
         super(props);
         this.state = props.report;
         this.initFromProps(props);
-    }
-
-    componentWillReceiveProps(props) {
-      this.setState({...props.report});
-      this.initFromProps(props);
-    }
-    shouldComponentUpdate(nextProps){
-      let upd = this.props.report !== nextProps.report;
-      return upd;
     }
 
     initFromProps = (props) => {
@@ -58,12 +52,23 @@ class Report extends Component{
       this.setSaveEnabled = () => props.setSaveEnabled(this.saveEnabled);
     }
 
-    tableData = () => this.tableDataRef.current ? 
-              this.tableDataRef.current.state.data : null;
+    tableData = () => this.tableDataRef.current ? this.tableDataRef.current.state.data : null;
+
+    shouldComponentUpdate = (nextProps, nextState) => {
+      if(this.state != nextState) return true;
+
+      if(this.props != nextProps){
+        console.log(nextProps.report);
+        this.setState(nextProps.report);
+        return false;
+      }
+    }
 
     getUpdatedReport = () => {
       const report = this.state;
       report.data = this.tableData();
+      console.log("UPDATED");
+      console.log(report);
       return report;
     }
     changeEnableState = () => {
@@ -79,8 +84,6 @@ class Report extends Component{
         [event.target.name+"Changed"]: true,
       });
       this.changeEnableState();
-      console.log({ [event.target.name]: event.target.value })
-
     }
 
     render() { 
@@ -90,13 +93,13 @@ class Report extends Component{
         <Row><Col><Form.Label className="form-label-h" >НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ “КИЄВО-МОГИЛЯНСЬКА АКАДЕМІЯ”</Form.Label></Col></Row>
         <Row><Col><Form.Label className="form-label-h">Заліково-екзаменаційна відомість {`${this.state.sheetType} № ${this.state.sheetCode}`} </Form.Label></Col></Row>
         <Row><Col><Input      report={this.state}        label="Освітній рівень" options={["Бакалавр","Магістр"]}  prop="okr"            handleChange={this.handleChange} /></Col></Row>
-        <Row><Col><Input      report={this.state}        label="Факультет"       options={["ФІ", "FE"]}          prop="faculty"          handleChange={this.handleChange} /></Col>
+        <Row><Col><Input      report={this.state}        label="Факультет"       options={facultyOptions}          prop="faculty"          handleChange={this.handleChange} /></Col>
               <Col><Input      report={this.state}        label="Рік навчання"    options={[1, 2, 3]}             prop="eduYear"          handleChange={this.handleChange} /></Col>
               <Col><Input         report={this.state}        label="Група"           placeholder="Група"             prop="group"            handleChange={this.handleChange} /></Col></Row>
         <Row><Col><Input         report={this.state}        label="Дисципліна"                                      prop="subject"          handleChange={this.handleChange} /></Col></Row>
-        <Row><Col><Input      report={this.state}        label="Семестр"         options={["1", "2", "3", "4", "5", "6", "7", "8"]}      prop="term"             handleChange={this.handleChange} /></Col>
+        <Row><Col><Input      report={this.state}        label="Семестр"         options={termOptions}      prop="term"             handleChange={this.handleChange} /></Col>
               <Col><Input         report={this.state}        label="Залікові бали"   placeholder="залікові біли"     prop="creditPoints"     handleChange={this.handleChange} /></Col></Row>
-        <Row><Col><Input      report={this.state}        label="Форма контролю"  options={["залік","іспит", "екзамен"]}     prop="controlForm"      handleChange={this.handleChange} /></Col>
+        <Row><Col><Input      report={this.state}        label="Форма контролю"  options={["залік","екзамен"]}     prop="controlForm"      handleChange={this.handleChange} /></Col>
               <Col><Input         report={this.state}        label="День"            placeholder="День"              pre="date" prop="day"   handleChange={this.handleChange} /></Col>
               <Col><Input         report={this.state}        label="Місяць"          placeholder="Місяць"            pre="date" prop="month" handleChange={this.handleChange} /></Col>
               <Col><Input         report={this.state}        label="Рік"             placeholder="Рік"               pre="date" prop="year"  handleChange={this.handleChange} /></Col></Row>

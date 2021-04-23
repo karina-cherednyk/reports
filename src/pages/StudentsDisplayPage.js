@@ -3,7 +3,7 @@ import { Component} from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import filterFactory, { textFilter, numberFilter, Comparator } from 'react-bootstrap-table2-filter';
+import filterFactory, { textFilter, numberFilter, selectFilter, Comparator } from 'react-bootstrap-table2-filter';
 import { Card,  Container , Tab, Row, Col, Nav, Button, Form } from 'react-bootstrap';
 
 function mapColumnName(name) {
@@ -35,6 +35,8 @@ const custNumFilter = numberFilter({
   style: { display: "flex", justifyContent: "space-between"},
   numberStyle : {width: "80px"}
 });
+
+
 
 const studentContent= (row) => {
   return  <Container className="dataFooter" >
@@ -82,18 +84,25 @@ class StudentsDisplayPage extends Component {
     const columns  = dataColumns.map(x => ({dataField: x, text: mapColumnName(x)}) )
     columns.find( x => x.dataField === "date").formatter = dateFormatter;
     columns.find( x => x.dataField === "index").hidden = true;
-    columns.find( x => x.dataField === "isDebtor").hidden = true;
-    columns.forEach( x => x.filter = textFilter({ placeholder: " "}));
+    columns.forEach( x => x.filter = textFilter({ placeholder: " ", style: { display: "flex", justifyContent: "space-between"} }));
     columns.find( x => x.dataField === "grade").filter = custNumFilter;
+    const debtorCol = columns.find( x => x.dataField === "isDebtor");
+    debtorCol.filter = 
+          selectFilter({
+            getFilter: (filter) => this.debtFilter = filter,
+            placeholder: " ",
+            style: { display: "block" },
+            options: {true: "так", false: "ні"}
+          });
+    debtorCol.formatter = cell => cell ? "так": "ні";
 
     this.state = {
       dataColumns: dataColumns,
       columns: columns,
       data: data,
       footerContent: null,
-      onlyDebtors: false,
-      toggledColumns: new Set()
     }
+
 
     this.rowEvents = {
       onClick: (e, row, rowIndex) => {
@@ -102,11 +111,13 @@ class StudentsDisplayPage extends Component {
     }
   }
 
+
+
   render(){
     return (
       <ToolkitProvider
         keyField="index"
-        data={ this.state.onlyDebtors ? this.state.data.filter(x => x.isDebtor) : this.state.data } 
+        data={ this.state.data } 
         columns={ this.state.columns } 
         columnToggle
       >
@@ -116,7 +127,7 @@ class StudentsDisplayPage extends Component {
           <Col sm={2}>
             <Nav variant="pills" className="flex-column">
             <Form.Check className="nav-link">
-              <Form.Check.Input onClick={e => this.setState({onlyDebtors: e.target.checked} )} />
+              <Form.Check.Input onClick={ (e) => this.debtFilter(e.target.checked || "") } /> 
               <Form.Check.Label>Показувати лише боржників</Form.Check.Label>
             </Form.Check>
 

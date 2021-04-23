@@ -39,12 +39,12 @@ class EditableReportPage extends Component {
       } };
       
       let report2 = await fetch(backendServer + "/check-chad-student-sheet", requestOptions).then(r => r.json());
-      console.log("AFTER CHECKING")
-      report2.sheetCode = 666;
+      for(const prop of Object.keys(report2)){
+        if(!prop.endsWith("Error")) report2[prop+"Changed"] = false;
+      }
       const newReports = this.state.reports;
       newReports[this.state.curIdx] = report2;
       this.setState({reports: newReports, checkEnabled: false});
-      console.log(this.state.reports)
 
     }
 
@@ -58,6 +58,7 @@ class EditableReportPage extends Component {
     setSaveEnabled = (val) =>  this.setState({saveEnabled: val});
 
     loadReports = (files) => {
+      const files_length = files.length; 
         let fetched_reports = [];
         Array.from(files).forEach(async (file) => {
             let data = new FormData();
@@ -66,10 +67,11 @@ class EditableReportPage extends Component {
             
             let report = await fetch(backendServer + "/parse", requestOptions).then(r => r.json());
             console.log("AFTER PARSING")
+            console.log(report);
             report.data = report.data.map((r, i) => ({...r, "index":i}))
             
             fetched_reports.push(report);
-            if(fetched_reports.length === files.length){
+            if(fetched_reports.length === files_length){
                 const new_reports = [...this.state.reports, ...fetched_reports];
                 new_reports.forEach((r, idx) => r.index = idx);
                 
