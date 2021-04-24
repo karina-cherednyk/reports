@@ -55,10 +55,9 @@ class Report extends Component{
     tableData = () => this.tableDataRef.current ? this.tableDataRef.current.state.data : null;
 
     shouldComponentUpdate = (nextProps, nextState) => {
-      if(this.state != nextState) return true;
+      if(this.state !== nextState) return true;
 
-      if(this.props != nextProps){
-        console.log(nextProps.report);
+      if(this.props !== nextProps){
         this.setState(nextProps.report);
         return false;
       }
@@ -66,7 +65,7 @@ class Report extends Component{
 
     getUpdatedReport = () => {
       const report = this.state;
-      report.data = this.tableData();
+      report.studentsData = this.tableData();
       console.log("UPDATED");
       console.log(report);
       return report;
@@ -108,7 +107,7 @@ class Report extends Component{
               <Col xs={4}><Input  report={this.state}        label="По-батькові екзаменатора"                        prop="teacherLastname"  handleChange={this.handleChange} /></Col>
               <Col xs={4}><Input  report={this.state}        label="Вчене звання"                                    prop="teacherRank"      handleChange={this.handleChange} /></Col></Row>
         <Row>
-            <Col><Table ref={this.tableDataRef} tableData={this.state.data} changeEnableState={this.changeEnableState}/></Col>
+            <Col><Table ref={this.tableDataRef} tableData={this.state.studentsData} changeEnableState={this.changeEnableState}/></Col>
         </Row>
     </Container>         
     </Card>

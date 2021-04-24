@@ -35,7 +35,8 @@ class Table extends Component{
           this.tableColumns = columns.map(c => ({dataField: c[0], text: c[1], style: this.mapStyle }) );
       }
       
-  }
+    }
+
 
   render() {
   return <BootstrapTable 

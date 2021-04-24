@@ -1,7 +1,7 @@
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import EditableReportPage   from "./pages/EditableReportPage";
 import StudentsDisplayPage  from "./pages/StudentsDisplayPage";
-import SubjectsDisplayPage  from "./pages/SubjectsDisplayPage";
+import DeletePage           from './pages/DeletePage';
 import ReportsDisplayPage   from "./pages/ReportsDisplayPage";
 import {Navbar, Nav, Button} from 'react-bootstrap'
 import {LinkContainer} from 'react-router-bootstrap'
@@ -28,9 +28,9 @@ class App extends Component {
             <LinkContainer to="/students">
               <Nav.Link>Відомості про студентів</Nav.Link>
             </LinkContainer>
-            {/* <LinkContainer to="/subjects">
-              <Nav.Link>Відомості про курси</Nav.Link>
-            </LinkContainer> */}
+            <LinkContainer to="/delete">
+              <Nav.Link>Видалити з бази</Nav.Link>
+            </LinkContainer>
             <LinkContainer to="/reports" >
               <Nav.Link>Переглянути збережені відомості</Nav.Link>
             </LinkContainer>
@@ -50,6 +50,9 @@ class App extends Component {
           </Route>
           <Route path="/reports">
             <ReportsDisplayPage toolbarOpened={this.state.toolbarOpened}  />
+          </Route>
+          <Route path="/delete">
+            <DeletePage   />
           </Route>
         </Switch> 
       </Router>

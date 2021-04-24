@@ -16,12 +16,12 @@ function mapColumnName(name) {
 }
 const ectsEditor = {
     type: "select",
-    options: "ABCDEF".split("").map( c => ({label: c, value: c}))
+    options: "ABCDEF ".split("").map( c => ({label: c, value: c}))
 };
 
 const nationalEditor = {
     type: "select",
-    options: ["Відмінно", "Добре", "Задовільно", "Незадовільно"].map( c => ({label: c, value: c}))
+    options: ["Відмінно", "Добре", "Задовільно", "Незадовільно", " "].map( c => ({label: c, value: c}))
 }
 
 const numberValidator = (newValue, x, y) => {
@@ -60,10 +60,21 @@ class Table extends Component{
         
     }
 
+    shouldComponentUpdate = (nextProps, nextState) => {
+        if(this.state !== nextState) return true;
+
+        if(this.props.tableData !== nextProps.tableData){
+          this.setState({data: nextProps.tableData});
+        }
+        return false;
+      }
+
 
     mapStyle = (x, y, rowIndex, colIndex) => {
-        const error =   this.state.data[rowIndex][this.dataColumns[colIndex]+'Error']
-        const changed = this.state.data[rowIndex][this.dataColumns[colIndex]+'Changed']
+
+
+        const error =   y[this.dataColumns[colIndex]+'Error']
+        const changed = y[this.dataColumns[colIndex]+'Changed']
         if(changed)     return {color: "green"};
         else if(error)  return {color: "red"}
         else            return {color: "black"}
@@ -73,7 +84,8 @@ class Table extends Component{
         const result = data.map((row) => 
             row.ordinal === rowId ? {...row, [dataField]: newValue, [dataField+"Changed"]: true} : row
         )
-        this.setState(() => ({data: result}));  
+        console.log("in update");
+        this.setState({data: result});  
         this.changeEnableState();
     }
 

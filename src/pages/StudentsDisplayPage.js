@@ -11,16 +11,14 @@ function mapColumnName(name) {
                   bookNo: "№ залікової книжки",
                   grade: "Оцінка за курс", subject: "Курс", 
                   teacherName: "ПІБ викладача",
-                  date: "Дата", isDebtor: "боржник",
+                  date: "Дата", isDebtor: "Боржник",
                   index: "№"
               }
-  return names[name]
-}
-function invisibleColumn(name){
-  return name === "index" || name === "isDebtor";
+  return names[name] ;
 }
 
-const dateFormatter = (cell, _) => {
+
+const dateFormatter = (cell) => {
   return cell.day+" "+cell.month+" "+cell.year
 }
 const paginationOptions = {
@@ -28,7 +26,6 @@ const paginationOptions = {
 };
 
 const custNumFilter = numberFilter({
-  // options: [2100, 2103, 2105],
   placeholder: ' ',
   withoutEmptyComparatorOption: true,
   comparators: [Comparator.EQ, Comparator.GT, Comparator.LT],
@@ -36,21 +33,21 @@ const custNumFilter = numberFilter({
   numberStyle : {width: "80px"}
 });
 
-
-
-const studentContent= (row) => {
-  return  <Container className="dataFooter" >
-            <Row> <h2>{row.studentName}</h2></Row>
-            <Row><p>Середній бал за рік:</p> </Row>
-            <Row><p>Середній бал за семестр:</p></Row>
-          </Container>
-         
+const dateFilterLogic = (val, data) => {
+  if (val) {
+    val = val.trim();
+    return data.filter(r =>
+      r.date.day === parseInt(val) || r.date.year === parseInt(val) || r.date.month.includes(val)
+    )
+  }
+  return data;
 }
 
 
-
-const CustomToggleList = ({columns, onColumnToggle, toggles}) => <>{
-  columns.filter(col => !invisibleColumn(col.dataField))
+const CustomToggleList = ({columns, onColumnToggle, toggles}) => {
+  console.log("In Update");
+  return <>{
+  columns.filter(col => !col.hidden )
   .map(col => ({...col, toggle: toggles.dataField}))
   .map( col => (
     <Nav.Item key={"nav-"+col.dataField} >
@@ -72,7 +69,7 @@ const CustomToggleList = ({columns, onColumnToggle, toggles}) => <>{
       </Nav.Item>
   ))
 
-}</>
+}</>}
 
 class StudentsDisplayPage extends Component {
   constructor(props){
@@ -84,16 +81,26 @@ class StudentsDisplayPage extends Component {
     const columns  = dataColumns.map(x => ({dataField: x, text: mapColumnName(x)}) )
     columns.find( x => x.dataField === "date").formatter = dateFormatter;
     columns.find( x => x.dataField === "index").hidden = true;
-    columns.forEach( x => x.filter = textFilter({ placeholder: " ", style: { display: "flex", justifyContent: "space-between"} }));
+    columns.forEach( x => x.filter = textFilter({placeholder: " ", getFilter: (filter) => this[x.dataField+"Filter"] = filter }));
     columns.find( x => x.dataField === "grade").filter = custNumFilter;
+    columns.find( x => x.dataField === "date").filter = textFilter({onFilter: dateFilterLogic, placeholder: " "});
+    columns.filter( x => !x.text ).forEach( x => x.hidden = true );
+
+    const studentRow = columns.find( x => x.dataField === "studentName");
+    const subjectRow = columns.find( x => x.dataField === "subject");
+    const teacherRow = columns.find( x => x.dataField === "teacherName");
+
+    [studentRow, subjectRow, teacherRow].forEach( r => this.createClickableRow(r));
+    
     const debtorCol = columns.find( x => x.dataField === "isDebtor");
     debtorCol.filter = 
           selectFilter({
-            getFilter: (filter) => this.debtFilter = filter,
+            getFilter: (filter) => this.isDebtorFilter = filter,
             placeholder: " ",
             style: { display: "block" },
             options: {true: "так", false: "ні"}
           });
+
     debtorCol.formatter = cell => cell ? "так": "ні";
 
     this.state = {
@@ -103,15 +110,89 @@ class StudentsDisplayPage extends Component {
       footerContent: null,
     }
 
-
-    this.rowEvents = {
-      onClick: (e, row, rowIndex) => {
-        this.setState({footerContent: studentContent(row)});
-      }
-    }
   }
 
+  createClickableRow = (row) => {
+    
+    row.formatter = cell => <button className="tabLink">{cell}</button>;
+    const content = () => this[row.dataField+"Content"];
 
+    row.events = {
+      onClick: (e, column, columnIndex, row, rowIndex) => {
+        this.setState({footerContent: content()(row) });
+      },
+    };
+
+  }
+
+  clearAllFilters = () => {
+    
+    this.state.dataColumns.forEach( prop => {
+        const filter = this[prop+"Filter"];
+        if(filter) filter("");        
+    });
+    this.debtCheckRef.checked = false;
+  }
+  
+
+  studentNameContent = (row) => {
+    return  <>
+    <Container className="dataFooter" >
+      <Row> 
+      <h2><button href="#" className="footerLink" 
+              onClick={() => this.studentNameFilter(row.studentName)}>
+          {row.studentName}
+      </button></h2>
+      </Row>
+      <Row><p>Середній бал за рік:</p> </Row>
+      <Row><p>Середній бал за семестр:</p></Row>
+      <Row><p>Боржник з предметів: </p></Row>
+      <Row><p>Середній бал: </p></Row>
+      <ul>
+        <li><button href="#" className="footerLink" 
+        onClick={() => { this.studentNameFilter(row.studentName); this.subjectFilter(row.subject); }}>
+          Математичне мислення
+          </button></li>
+      </ul>
+    </Container>
+    </>
+     
+  }
+
+  subjectContent = (row) => {
+    return <>
+    <Container className="dataFooter" >
+    <Row> 
+      <h2><button href="#" className="footerLink" 
+              onClick={() => this.subjectFilter(row.subject)}>
+          {row.subject}
+      </button></h2>
+      </Row>
+      <Row><p>
+      <button href="#" className="footerLink" onClick={() => { this.debtFilter(true); this.subjectFilter(row.subject); }}>
+        Кількість боржників:  0</button></p></Row>
+      <Row><p>Середній бал у студентів: 0</p></Row>
+      <Row><p>Кількість недопусків: 0</p> </Row>
+    </Container>
+    </>
+  }
+
+  teacherNameContent = (row) => {
+    return <>
+    <Container className="dataFooter" >
+    <Row> 
+      <h2><button href="#" className="footerLink" 
+              onClick={() => this.teacherNameFilter(row.teacherName)}>
+          {row.teacherName}
+      </button></h2>
+      </Row>
+      <Row><p>Кількість недопусків: 0</p> </Row>
+    </Container>
+    </>
+  }
+  handleTableChange = (type, { filters }) => {
+    console.log(filters);
+  }
 
   render(){
     return (
@@ -127,11 +208,11 @@ class StudentsDisplayPage extends Component {
           <Col sm={2}>
             <Nav variant="pills" className="flex-column">
             <Form.Check className="nav-link">
-              <Form.Check.Input onClick={ (e) => this.debtFilter(e.target.checked || "") } /> 
+              <Form.Check.Input onClick={ (e) => this.isDebtorFilter(e.target.checked || "") } ref={ref => this.debtCheckRef = ref}/> 
               <Form.Check.Label>Показувати лише боржників</Form.Check.Label>
             </Form.Check>
-
             <CustomToggleList { ...props.columnToggleProps }  />
+            <Button variant="outline-primary" onClick={() => this.clearAllFilters()} >Очистити фільтри</Button>
             </Nav>
           </Col>
           <Col sm={10}>
@@ -140,16 +221,17 @@ class StudentsDisplayPage extends Component {
           <Container style={{ minWidth: "100%"}} >
           <Row>
             <BootstrapTable
+                onTableChange={ this.handleTableChange }
                 condensed={true}
                 bordered={ false }
                 { ...props.baseProps }
                 pagination={ paginationFactory(paginationOptions) } 
                 filter={ filterFactory() }
                 rowEvents={ this.rowEvents }
-                
+                remote={ { filter: true } }
                 />
           </Row>
-          <Row >
+          <Row className="align-items-end">
             {this.state.footerContent}
           </Row>
           </Container>

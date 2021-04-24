@@ -90,8 +90,8 @@ label.btn-nav {
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-weight: 500;
     line-height: 1.6;
-    margin-left: 8px;
-    margin-right: 8px;
+    /* margin-left: 8px;
+    margin-right: 8px; */
     letter-spacing: 0.0075em;
 }
 .btn-primary {
@@ -176,6 +176,22 @@ tr:hover td {
     margin: 0;
 }
 .dataFooter {
-    border: 1px dashed var(--primary-footer);
     padding: 20px;
+}
+.btn-outline-primary {
+    color: var(--primary);
+    border-color: var(--primary);;
+}
+.btn-outline-primary:hover {
+    color: #fff;
+    background-color:var(--primary);
+    border-color: var(--primary);
+}
+button.tabLink, button.footerLink {
+    background-color: transparent;
+    border: none;
+    color: var(--primary);
+}
+button.tabLink:hover, button.footerLink:hover  {
+    text-decoration: underline;
 }

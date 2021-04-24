@@ -39,10 +39,9 @@ class EditableReportPage extends Component {
       } };
       
       let report2 = await fetch(backendServer + "/check-chad-student-sheet", requestOptions).then(r => r.json());
-      for(const prop of Object.keys(report2)){
-        if(!prop.endsWith("Error")) report2[prop+"Changed"] = false;
-      }
       const newReports = this.state.reports;
+      console.log("Fetched");
+      console.log(newReports);
       newReports[this.state.curIdx] = report2;
       this.setState({reports: newReports, checkEnabled: false});
 
@@ -68,7 +67,7 @@ class EditableReportPage extends Component {
             let report = await fetch(backendServer + "/parse", requestOptions).then(r => r.json());
             console.log("AFTER PARSING")
             console.log(report);
-            report.data = report.data.map((r, i) => ({...r, "index":i}))
+            report.studentsData = report.studentsData.map((r, i) => ({...r, "index":i}))
             
             fetched_reports.push(report);
             if(fetched_reports.length === files_length){
